@@ -1,11 +1,10 @@
 package com.example.petstore.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Setter
@@ -20,18 +19,14 @@ public class Orders {
   private double totalPrice;
   private boolean completedOrder = false;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "buyer_id", referencedColumnName = "id", nullable = false)
+  @JsonBackReference
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "buyer_id", nullable = false)
   private Person buyer;
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "seller_id", referencedColumnName = "id")
-  private Person seller;
-  @OneToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "address_id", referencedColumnName = "id")
-  private Address address;
-  @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
-  @JoinColumn(name = "pet_id", referencedColumnName = "id")
-  private List<Pet> pets = new ArrayList<>();
+
+  // @JsonManagedReference
+//  @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
+//  private Set<Pet> pets;
 
   private LocalDateTime createdAt = LocalDateTime.now();
   private LocalDateTime updatedAt;

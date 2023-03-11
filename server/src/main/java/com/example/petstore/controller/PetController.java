@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = Cons.CLIENT_URL_BASE)
@@ -51,9 +50,10 @@ public class PetController {
       }
 
       Page<Pet> petPage = petRepository.findAll(paging);
-      List<PetBasicDTO> petList = petPage.stream().map(
-          person -> modelMapper.map(person, PetBasicDTO.class)).toList();
-      return ResponseHandler.generateResponse(ConsPets.PETS_FOUNDED_SUCCESS, HttpStatus.OK, petList);
+      Page<PetBasicDTO> petPageBasic = petPage.map(
+          pet -> modelMapper.map(pet, PetBasicDTO.class));
+
+      return ResponseHandler.generateResponse(ConsPets.PETS_FOUNDED_SUCCESS, HttpStatus.OK, petPageBasic);
     } catch (Exception e) {
       return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
     }

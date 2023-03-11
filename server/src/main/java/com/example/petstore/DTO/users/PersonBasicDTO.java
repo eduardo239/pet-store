@@ -1,11 +1,15 @@
 package com.example.petstore.DTO.users;
 
 import com.example.petstore.model.Address;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class PersonBasicDTO {
   private Long id;
   private String username;

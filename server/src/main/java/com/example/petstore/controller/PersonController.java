@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -111,9 +110,10 @@ public class PersonController {
       }
 
       Page<Person> personPage = personRepository.findAll(paging);
-      List<PersonBasicDTO> personList = personPage.stream().map(
-          person -> modelMapper.map(person, com.example.petstore.DTO.users.PersonBasicDTO.class)).toList();
-      return ResponseHandler.generateResponse(ConsUser.USERS_FOUNDED_SUCCESS, HttpStatus.OK, personList);
+      Page<PersonBasicDTO> personPageBasic = personPage.map(
+          person -> modelMapper.map(person, PersonBasicDTO.class));
+
+      return ResponseHandler.generateResponse(ConsUser.USERS_FOUNDED_SUCCESS, HttpStatus.OK, personPageBasic);
     } catch (Exception e) {
       return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
     }

@@ -2,12 +2,16 @@ package com.example.petstore.DTO.users;
 
 import com.example.petstore.model.Address;
 import com.example.petstore.model.Pet;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class PersonCompleteDTO {
   private Long id;
   private String username;

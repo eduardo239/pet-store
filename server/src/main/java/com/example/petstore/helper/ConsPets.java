@@ -7,6 +7,8 @@ public class ConsPets {
   public static final String PET_FOUNDED_SUCCESS = "Pet encontrado com sucesso";
   public static final String PET_UPDATED_SUCCESS = "Pet atualizado com sucesso";
   public static final String PET_REMOVED_SUCCESS = "Pet removido com sucesso";
+  // erro
+  public static final String PET_LIST_EMPTY = "A lista de pets está vazia";
 
   // lista usuário
   public static final String PETS_FOUNDED_SUCCESS = "Pets encontrados com sucesso";

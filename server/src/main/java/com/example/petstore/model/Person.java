@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,10 +34,10 @@ public class Person {
   @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Set<Pet> pets;
 
-  //  @ToString.Exclude
-  //  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-  //  @JoinColumn(name = "person_id")
-  //  Set<PersonOrder> orders = new HashSet<>(0);
+  @JsonManagedReference
+  @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<Orders> orders;
+
   private LocalDateTime createdAt = LocalDateTime.now();
   private LocalDateTime updatedAt;
 }
