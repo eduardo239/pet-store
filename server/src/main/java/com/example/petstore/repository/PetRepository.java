@@ -18,4 +18,5 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
   @Transactional
   long deleteAllByOwner(Person owner);
+  
 }

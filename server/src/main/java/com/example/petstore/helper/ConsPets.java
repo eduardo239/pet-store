@@ -9,6 +9,8 @@ public class ConsPets {
   public static final String PET_REMOVED_SUCCESS = "Pet removido com sucesso";
   // erro
   public static final String PET_LIST_EMPTY = "A lista de pets está vazia";
+  public static final String PET_REQUIRED = "É necessário escolher pelo menos um pet";
+  public static final String ONE_OR_MORE_PET_NOT_FOUND = "Um ou mais pets não foram encontrados";
 
   // lista usuário
   public static final String PETS_FOUNDED_SUCCESS = "Pets encontrados com sucesso";

@@ -8,6 +8,9 @@ public class ConsOrders {
   public static final String ORDER_UPDATED_SUCCESS = "Pedido atualizado com sucesso";
   public static final String ORDER_REMOVED_SUCCESS = "Pedido removido com sucesso";
 
+  // erros
+  public static final String ORDERS_NOT_FOUND = "Pedidos não encontrados";
+
   // lista usuário
   public static final String ORDERS_FOUNDED_SUCCESS = "Pedidos encontrados com sucesso";
   public static final String ORDERS_REMOVED_SUCCESS = "Pedidos removidos com sucesso";

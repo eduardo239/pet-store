@@ -30,12 +30,7 @@ public class Pet {
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "owner_id", nullable = false)
   private Person owner;
-
-//  @JsonBackReference
-//  @ManyToOne(fetch = FetchType.EAGER, optional = false)
-//  @JoinColumn(name = "buyer_id", nullable = false)
-//  private Person buyer;
-
+  
   private LocalDateTime createdAt = LocalDateTime.now();
   private LocalDateTime updatedAt;
 }

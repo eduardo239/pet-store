@@ -8,6 +8,9 @@ public class ConsAddr {
   public static final String ADDRESS_UPDATED_SUCCESS = "Endereço atualizado com sucesso";
   public static final String ADDRESS_REMOVED_SUCCESS = "Endereço removido com sucesso";
 
+  // erro
+  public static final String ADDRESS_REQUIRED = "O endereço é obrigatório";
+
   // lista usuário
   public static final String ADDRESSES_FOUNDED_SUCCESS = "Endereços encontrados com sucesso";
   public static final String ADDRESSES_REMOVED_SUCCESS = "Endereços removidos com sucesso";

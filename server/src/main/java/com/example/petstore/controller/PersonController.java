@@ -1,11 +1,13 @@
 package com.example.petstore.controller;
 
+import com.example.petstore.DTO.orders.OrdersBasicDTO;
+import com.example.petstore.DTO.pets.PetBasicDTO;
 import com.example.petstore.DTO.users.*;
-import com.example.petstore.helper.Cons;
-import com.example.petstore.helper.ConsAddr;
-import com.example.petstore.helper.ConsUser;
+import com.example.petstore.helper.*;
 import com.example.petstore.model.Address;
+import com.example.petstore.model.Orders;
 import com.example.petstore.model.Person;
+import com.example.petstore.repository.OrdersRepository;
 import com.example.petstore.repository.PersonRepository;
 import com.example.petstore.repository.PetRepository;
 import com.example.petstore.response.ResponseHandler;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,6 +40,8 @@ public class PersonController {
   private PersonRepository personRepository;
   @Autowired
   private PetRepository petRepository;
+  @Autowired
+  private OrdersRepository ordersRepository;
 
   @PostMapping("/sign-up")
   public ResponseEntity<Object> userRegistration(@RequestBody PersonSignUpDTO person) {
@@ -241,6 +246,37 @@ public class PersonController {
     }
   }
 
+  // TODO: Refatorar, paginação
+  @GetMapping("{id}/pets")
+  public ResponseEntity<Object> getPetsByPerson(@PathVariable Long id) {
+    Optional<Person> personOptional = personRepository.findById(id);
+    if (personOptional.isPresent()) {
+      List<PetBasicDTO> petList = petRepository.findByOwner(personOptional.get()).stream().map(
+          pet -> modelMapper.map(pet, PetBasicDTO.class)).toList();
+      return ResponseHandler.generateResponse(ConsPets.PETS_FOUNDED_SUCCESS, HttpStatus.OK, petList);
+    } else {
+      return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    }
+  }
+
+  // TODO: Refatorar, paginação
+  @GetMapping("{id}/orders")
+  public ResponseEntity<Object> getOrdersByPerson(@PathVariable Long id) {
+    Optional<Person> personOptional = personRepository.findById(id);
+    if (personOptional.isPresent()) {
+
+      List<OrdersBasicDTO> orderList = ordersRepository.findByBuyer(personOptional.get()).stream().map(
+          order -> modelMapper.map(order, OrdersBasicDTO.class)).toList();
+      return ResponseHandler.generateResponse(ConsOrders.ORDERS_FOUNDED_SUCCESS, HttpStatus.OK, orderList);
+    } else {
+      return ResponseHandler.generateResponse(ConsOrders.ORDERS_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    }
+  }
+
+
+  // FIXME: org.postgresql.util.PSQLException: ERROR: update or delete on table
+  //  "person" violates foreign key constraint "fk251rqwlb1bet511mh15nu1emv" on table "orders"
+  //  Detalhe: Key (id)=(1) is still referenced from table "orders".
   @DeleteMapping("{id}")
   public ResponseEntity<Object> deletePersonById(@PathVariable Long id) {
     Optional<Person> person_ = personRepository.findById(id);

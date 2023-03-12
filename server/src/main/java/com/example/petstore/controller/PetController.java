@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = Cons.CLIENT_URL_BASE)
@@ -91,6 +92,7 @@ public class PetController {
       return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);
     }
   }
+
 
   @DeleteMapping("{id}")
   public ResponseEntity<Object> deletePetById(@PathVariable Long id) {

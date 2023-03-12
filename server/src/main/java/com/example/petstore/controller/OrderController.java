@@ -2,12 +2,16 @@ package com.example.petstore.controller;
 
 
 import com.example.petstore.DTO.orders.OrdersBasicDTO;
-import com.example.petstore.helper.Cons;
-import com.example.petstore.helper.ConsOrders;
-import com.example.petstore.helper.ConsPets;
+import com.example.petstore.DTO.pets.PetBasicDTO;
+import com.example.petstore.helper.*;
+import com.example.petstore.model.Address;
 import com.example.petstore.model.Orders;
+import com.example.petstore.model.Person;
+import com.example.petstore.model.Pet;
+import com.example.petstore.repository.AddressRepository;
 import com.example.petstore.repository.OrdersRepository;
 import com.example.petstore.repository.PersonRepository;
+import com.example.petstore.repository.PetRepository;
 import com.example.petstore.response.ResponseHandler;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = Cons.CLIENT_URL_BASE)
 @RestController
@@ -30,6 +39,10 @@ public class OrderController {
   private OrdersRepository ordersRepository;
   @Autowired
   private PersonRepository personRepository;
+  @Autowired
+  private PetRepository petRepository;
+  @Autowired
+  private AddressRepository addressRepository;
 
   @GetMapping
   public ResponseEntity<Object> getAllOrders(
@@ -48,7 +61,8 @@ public class OrderController {
 
       Page<Orders> ordersPage = ordersRepository.findAll(paging);
       Page<OrdersBasicDTO> ordersPageBasic = ordersPage.map(
-          person -> modelMapper.map(person, OrdersBasicDTO.class));
+          orders -> modelMapper.map(orders, OrdersBasicDTO.class));
+
 
       return ResponseHandler.generateResponse(ConsOrders.ORDERS_FOUNDED_SUCCESS, HttpStatus.OK, ordersPageBasic);
     } catch (Exception e) {
@@ -56,14 +70,66 @@ public class OrderController {
     }
   }
 
+
+  // TODO: fix
   @PostMapping
-  public ResponseEntity<Object> addOrderAndAddToUserOrders(@RequestBody Orders orders) {
+  public ResponseEntity<Object> addOrderAndAddTransferPets(@RequestBody Orders orders) {
     // buscar o user, salvar o endereço buscar os pets, salvar tudo
+    Optional<Person> buyer_ = personRepository.findById(orders.getBuyer().getId());
+    Optional<Person> seller_ = personRepository.findById(orders.getSeller().getId());
+    if (buyer_.isEmpty() || seller_.isEmpty()) {
+      return ResponseHandler.generateResponse(
+          ConsUser.USER_NOT_FOUND, HttpStatus.OK, null);
+    }
+
+    if (orders.getPets().size() == 0) {
+      return ResponseHandler.generateResponse(
+          ConsPets.PET_REQUIRED, HttpStatus.OK, null);
+    }
+
+    if (orders.getAddress() == null || orders.getAddress().getCep() == null) {
+      return ResponseHandler.generateResponse(
+          ConsAddr.ADDRESS_REQUIRED, HttpStatus.OK, null);
+    }
+
     try {
-      Orders savedOrder = ordersRepository.save(orders);
+      Set<Pet> petOrderList = orders.getPets();
+      Set<Pet> petListToUpdate = new HashSet<>();
+
+      petOrderList.forEach(pet -> {
+        Optional<Pet> optionalPet = petRepository.findById(pet.getId());
+        if (optionalPet.isPresent()) {
+          optionalPet.get().setPrice(0);
+          optionalPet.get().setForSale(false);
+          optionalPet.get().setOwner(buyer_.get());
+          optionalPet.ifPresent(petListToUpdate::add);
+        }
+      });
+
+      if (petOrderList.size() != petListToUpdate.size()) {
+        return ResponseHandler.generateResponse(
+            ConsPets.ONE_OR_MORE_PET_NOT_FOUND, HttpStatus.OK, null);
+      }
+
+      // salvar o valor total da compra
+      // orders.setTotalPrice(totalPrice);
+
+      orders.setPets(petListToUpdate);
+
+      // Validar o endereço
+      Address address = addressRepository.save(orders.getAddress());
+      orders.setAddress(address);
+
+      // Adicionar o pedido ao usuário
+      orders.setBuyer(buyer_.get());
+      orders.setSeller(seller_.get());
+
+      // Salvar o pedido
+      Orders newOrder = ordersRepository.save(orders);
+      OrdersBasicDTO orderResponse = modelMapper.map(newOrder, OrdersBasicDTO.class);
 
       return ResponseHandler.generateResponse(
-          ConsPets.PET_REGISTERED_SUCCESS, HttpStatus.OK, savedOrder);
+          ConsPets.PET_REGISTERED_SUCCESS, HttpStatus.OK, orderResponse);
 
     } catch (Exception e) {
       return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
@@ -71,35 +137,35 @@ public class OrderController {
     }
   }
 
-//  @GetMapping("{id}")
-//  public ResponseEntity<Object> getPetById(@PathVariable Long id) {
-//    Optional<Orders> order_ = ordersRepository.findById(id);
-//    if (order_.isPresent()) {
-////      PetBasicDTO petResponse = modelMapper.map(pet_, PetBasicDTO.class);
-//      return ResponseHandler.generateResponse(ConsOrders.PET_FOUNDED_SUCCESS, HttpStatus.OK, order_);
-//    } else {
-//      return ResponseHandler.generateResponse(ConsOrders.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);
-//    }
-//  }
+  @GetMapping("{id}")
+  public ResponseEntity<Object> getOrderById(@PathVariable Long id) {
+    Optional<Orders> order_ = ordersRepository.findById(id);
+    if (order_.isPresent()) {
+      OrdersBasicDTO orderResponse = modelMapper.map(order_, OrdersBasicDTO.class);
+      return ResponseHandler.generateResponse(ConsOrders.ORDER_FOUNDED_SUCCESS, HttpStatus.OK, orderResponse);
+    } else {
+      return ResponseHandler.generateResponse(ConsOrders.ORDER_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    }
+  }
 
-//  @DeleteMapping("{id}")
-//  public ResponseEntity<Object> deletePetById(@PathVariable Long id) {
-//    Optional<Pet> pet_ = petRepository.findById(id);
-//    if (pet_.isPresent()) {
-//      petRepository.deleteById(id);
-//      return ResponseHandler.generateResponse(ConsOrders.PETS_REMOVED_SUCCESS, HttpStatus.OK, null);
-//    } else {
-//      return ResponseHandler.generateResponse(ConsOrders.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);
-//    }
-//  }
+  @DeleteMapping("{id}")
+  public ResponseEntity<Object> deleteOrderById(@PathVariable Long id) {
+    Optional<Orders> order_ = ordersRepository.findById(id);
+    if (order_.isPresent()) {
+      ordersRepository.deleteById(id);
+      return ResponseHandler.generateResponse(ConsOrders.ORDER_REMOVED_SUCCESS, HttpStatus.OK, null);
+    } else {
+      return ResponseHandler.generateResponse(ConsOrders.ORDER_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    }
+  }
 
-//  @DeleteMapping("/delete-all")
-//  public ResponseEntity<Object> deleteAllOrders() {
-//    try {
-//      petRepository.deleteAll();
-//      return ResponseHandler.generateResponse(ConsOrders.PETS_REMOVED_SUCCESS, HttpStatus.OK, null);
-//    } catch (Exception e) {
-//      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
-//    }
-//  }
+  @DeleteMapping("/delete-all")
+  public ResponseEntity<Object> deleteAllOrders() {
+    try {
+      ordersRepository.deleteAll();
+      return ResponseHandler.generateResponse(ConsOrders.ORDERS_REMOVED_SUCCESS, HttpStatus.OK, null);
+    } catch (Exception e) {
+      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+  }
 }
