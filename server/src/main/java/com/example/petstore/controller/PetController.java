@@ -3,7 +3,9 @@ package com.example.petstore.controller;
 
 import com.example.petstore.DTO.comments.CommentsBasicDTO;
 import com.example.petstore.DTO.pets.PetBasicDTO;
+import com.example.petstore.DTO.pets.PetCompleteDTO;
 import com.example.petstore.helper.Cons;
+import com.example.petstore.helper.ConsComm;
 import com.example.petstore.helper.ConsPets;
 import com.example.petstore.helper.ConsUser;
 import com.example.petstore.model.Comment;
@@ -93,15 +95,22 @@ public class PetController {
       @PathVariable Long id, @RequestBody Comment comment) {
     try {
       Optional<Pet> petToUpdate = petRepository.findById(id);
-      Optional<Person> person_ = personRepository.findById(comment.getPerson().getId());
+//      Optional<Person> person_ = personRepository.findById(comment.getPerson().getId());
       if (petToUpdate.isEmpty()) {
         return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
-      } else if (person_.isEmpty()) {
-        return ResponseHandler.generateResponse(ConsUser.USER_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+//      } else if (person_.isEmpty()) {
+//        return ResponseHandler.generateResponse(ConsUser.USER_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
       } else {
 
-        comment.setPerson(person_.get());
+//        comment.setPerson(person_.get());
         Comment savedComment = commentRepository.save(comment);
+
+        // salva os dados na lista do pet
+        List<Comment> comments_ = petToUpdate.get().getComments();
+        comments_.add(comment);
+        petToUpdate.get().setComments(comments_);
+        Pet pet_ = petRepository.save(petToUpdate.get());
+
         CommentsBasicDTO commentResponse = modelMapper.map(savedComment, CommentsBasicDTO.class);
 
         return ResponseHandler.generateResponse(
@@ -112,11 +121,22 @@ public class PetController {
     }
   }
 
+  @DeleteMapping("{pid}/comments/{cid}")
+  public ResponseEntity<Object> deleteCommentById(@PathVariable Long pid, @PathVariable Long cid) {
+    Optional<Comment> comment_ = commentRepository.findById(cid);
+    if (comment_.isPresent()) {
+      commentRepository.deleteById(cid);
+      return ResponseHandler.generateResponse(ConsComm.COMMENT_REMOVED_SUCCESS, HttpStatus.OK, null);
+    } else {
+      return ResponseHandler.generateResponse(ConsComm.COMMENT_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    }
+  }
+
   @GetMapping("{id}")
   public ResponseEntity<Object> getPetById(@PathVariable Long id) {
     Optional<Pet> pet_ = petRepository.findById(id);
     if (pet_.isPresent()) {
-      PetBasicDTO petResponse = modelMapper.map(pet_, PetBasicDTO.class);
+      PetCompleteDTO petResponse = modelMapper.map(pet_, PetCompleteDTO.class);
       return ResponseHandler.generateResponse(ConsPets.PET_FOUNDED_SUCCESS, HttpStatus.OK, petResponse);
     } else {
       return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);

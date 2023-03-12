@@ -34,6 +34,7 @@ public class Pet {
   @JoinColumn(name = "owner_id", nullable = false)
   private Person owner;
 
+  @JsonManagedReference
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "comment_id", referencedColumnName = "id")
   private List<Comment> comments;
