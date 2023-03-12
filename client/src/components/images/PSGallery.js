@@ -73,7 +73,7 @@ const PSGallery = ({ item }) => {
   else
     return (
       <Stack bg={COLOR_WHITE_ALTERNATE} p={SPACING_SMALL}>
-        <Center>Nenhuma foto encontrada</Center>
+        <Center>Nenhuma foto encontrada!</Center>
       </Stack>
     );
 };
