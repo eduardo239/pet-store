@@ -1,11 +1,14 @@
 package com.example.petstore.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -30,7 +33,11 @@ public class Pet {
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "owner_id", nullable = false)
   private Person owner;
-  
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "comment_id", referencedColumnName = "id")
+  private List<Comment> comments;
+
   private LocalDateTime createdAt = LocalDateTime.now();
   private LocalDateTime updatedAt;
 }

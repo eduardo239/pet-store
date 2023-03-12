@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
   Page<Person> findAll(Pageable pageable);
+  
 
   List<Person> findByEmailContainingIgnoreCase(String email);
 
@@ -21,5 +22,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
   boolean existsByEmailIgnoreCase(String email);
 
   boolean existsByUsernameIgnoreCase(String username);
-  
+
 }

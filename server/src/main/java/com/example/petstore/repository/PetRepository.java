@@ -1,5 +1,6 @@
 package com.example.petstore.repository;
 
+import com.example.petstore.model.Orders;
 import com.example.petstore.model.Person;
 import com.example.petstore.model.Pet;
 import jakarta.transaction.Transactional;
@@ -16,7 +17,9 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
   List<Pet> findByOwner(Person owner);
 
+  Page<Pet> findByOwner(Person owner, Pageable pageable);
+
   @Transactional
   long deleteAllByOwner(Person owner);
-  
+
 }

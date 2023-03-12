@@ -70,8 +70,6 @@ public class OrderController {
     }
   }
 
-
-  // TODO: fix
   @PostMapping
   public ResponseEntity<Object> addOrderAndAddTransferPets(@RequestBody Orders orders) {
     // buscar o user, salvar o endereço buscar os pets, salvar tudo
@@ -96,6 +94,7 @@ public class OrderController {
       Set<Pet> petOrderList = orders.getPets();
       Set<Pet> petListToUpdate = new HashSet<>();
 
+      // mudar o pet de dono
       petOrderList.forEach(pet -> {
         Optional<Pet> optionalPet = petRepository.findById(pet.getId());
         if (optionalPet.isPresent()) {
@@ -106,13 +105,11 @@ public class OrderController {
         }
       });
 
+      // validar se todos os pets foram salvos
       if (petOrderList.size() != petListToUpdate.size()) {
         return ResponseHandler.generateResponse(
             ConsPets.ONE_OR_MORE_PET_NOT_FOUND, HttpStatus.OK, null);
       }
-
-      // salvar o valor total da compra
-      // orders.setTotalPrice(totalPrice);
 
       orders.setPets(petListToUpdate);
 
@@ -130,10 +127,8 @@ public class OrderController {
 
       return ResponseHandler.generateResponse(
           ConsPets.PET_REGISTERED_SUCCESS, HttpStatus.OK, orderResponse);
-
     } catch (Exception e) {
       return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
-
     }
   }
 

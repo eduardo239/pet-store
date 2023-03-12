@@ -7,6 +7,7 @@ import com.example.petstore.helper.*;
 import com.example.petstore.model.Address;
 import com.example.petstore.model.Orders;
 import com.example.petstore.model.Person;
+import com.example.petstore.model.Pet;
 import com.example.petstore.repository.OrdersRepository;
 import com.example.petstore.repository.PersonRepository;
 import com.example.petstore.repository.PetRepository;
@@ -246,41 +247,106 @@ public class PersonController {
     }
   }
 
-  // TODO: Refatorar, paginação
   @GetMapping("{id}/pets")
-  public ResponseEntity<Object> getPetsByPerson(@PathVariable Long id) {
-    Optional<Person> personOptional = personRepository.findById(id);
-    if (personOptional.isPresent()) {
-      List<PetBasicDTO> petList = petRepository.findByOwner(personOptional.get()).stream().map(
-          pet -> modelMapper.map(pet, PetBasicDTO.class)).toList();
-      return ResponseHandler.generateResponse(ConsPets.PETS_FOUNDED_SUCCESS, HttpStatus.OK, petList);
-    } else {
-      return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+  public ResponseEntity<Object> getPetsByPerson(
+      @PathVariable Long id,
+      @RequestParam(value = "limit", required = false, defaultValue = "0") Integer limit,
+      @RequestParam(value = "offset", required = false, defaultValue = "3") Integer offset,
+      @RequestParam(defaultValue = "id") String sort,
+      @RequestParam(defaultValue = "asc") String order) {
+
+    Pageable paging = PageRequest.of(limit, offset, Sort.by(sort));
+    try {
+      if (order != null && order.equals("asc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).ascending());
+      } else if (order != null && order.equals("desc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).descending());
+      }
+
+      Optional<Person> personOptional = personRepository.findById(id);
+      if (personOptional.isPresent()) {
+
+        Page<Pet> petPage = petRepository.findByOwner(personOptional.get(), paging);
+        Page<PetBasicDTO> petsPageBasic = petPage.map(
+            pet -> modelMapper.map(pet, PetBasicDTO.class));
+        return ResponseHandler.generateResponse(ConsPets.PETS_FOUNDED_SUCCESS, HttpStatus.OK, petsPageBasic);
+      } else {
+        return ResponseHandler.generateResponse(ConsUser.USER_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+      }
+    } catch (Exception e) {
+      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
     }
   }
 
-  // TODO: Refatorar, paginação
   @GetMapping("{id}/orders")
-  public ResponseEntity<Object> getOrdersByPerson(@PathVariable Long id) {
-    Optional<Person> personOptional = personRepository.findById(id);
-    if (personOptional.isPresent()) {
+  public ResponseEntity<Object> getOrdersByPerson(
+      @PathVariable Long id,
+      @RequestParam(value = "limit", required = false, defaultValue = "0") Integer limit,
+      @RequestParam(value = "offset", required = false, defaultValue = "3") Integer offset,
+      @RequestParam(defaultValue = "id") String sort,
+      @RequestParam(defaultValue = "asc") String order) {
 
-      List<OrdersBasicDTO> orderList = ordersRepository.findByBuyer(personOptional.get()).stream().map(
-          order -> modelMapper.map(order, OrdersBasicDTO.class)).toList();
-      return ResponseHandler.generateResponse(ConsOrders.ORDERS_FOUNDED_SUCCESS, HttpStatus.OK, orderList);
-    } else {
-      return ResponseHandler.generateResponse(ConsOrders.ORDERS_NOT_FOUND, HttpStatus.NOT_FOUND, null);
+    Pageable paging = PageRequest.of(limit, offset, Sort.by(sort));
+    try {
+      if (order != null && order.equals("asc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).ascending());
+      } else if (order != null && order.equals("desc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).descending());
+      }
+
+      Optional<Person> personOptional = personRepository.findById(id);
+      if (personOptional.isPresent()) {
+
+        Page<Orders> ordersPage = ordersRepository.findByBuyer(personOptional.get(), paging);
+        Page<OrdersBasicDTO> ordersBasicPage = ordersPage.map(
+            orders -> modelMapper.map(orders, OrdersBasicDTO.class));
+        return ResponseHandler.generateResponse(ConsOrders.ORDERS_FOUNDED_SUCCESS, HttpStatus.OK, ordersBasicPage);
+      } else {
+        return ResponseHandler.generateResponse(ConsOrders.ORDERS_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+      }
+    } catch (Exception e) {
+      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+  }
+
+  @GetMapping("{id}/sales")
+  public ResponseEntity<Object> getSalesByPerson(
+      @PathVariable Long id,
+      @RequestParam(value = "limit", required = false, defaultValue = "0") Integer limit,
+      @RequestParam(value = "offset", required = false, defaultValue = "3") Integer offset,
+      @RequestParam(defaultValue = "id") String sort,
+      @RequestParam(defaultValue = "asc") String order) {
+
+    Pageable paging = PageRequest.of(limit, offset, Sort.by(sort));
+    try {
+      if (order != null && order.equals("asc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).ascending());
+      } else if (order != null && order.equals("desc")) {
+        paging = PageRequest.of(limit, offset, Sort.by(sort).descending());
+      }
+
+      Optional<Person> personOptional = personRepository.findById(id);
+      if (personOptional.isPresent()) {
+
+        Page<Orders> salesPage = ordersRepository.findBySeller(personOptional.get(), paging);
+        Page<OrdersBasicDTO> salesBasicPage = salesPage.map(
+            sales -> modelMapper.map(sales, OrdersBasicDTO.class));
+        return ResponseHandler.generateResponse(ConsOrders.ORDERS_FOUNDED_SUCCESS, HttpStatus.OK, salesBasicPage);
+      } else {
+        return ResponseHandler.generateResponse(ConsOrders.ORDERS_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+      }
+    } catch (Exception e) {
+      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
     }
   }
 
 
-  // FIXME: org.postgresql.util.PSQLException: ERROR: update or delete on table
-  //  "person" violates foreign key constraint "fk251rqwlb1bet511mh15nu1emv" on table "orders"
-  //  Detalhe: Key (id)=(1) is still referenced from table "orders".
   @DeleteMapping("{id}")
   public ResponseEntity<Object> deletePersonById(@PathVariable Long id) {
     Optional<Person> person_ = personRepository.findById(id);
     if (person_.isPresent()) {
+      List<Orders> orders = ordersRepository.findByBuyer(person_.get());
+      ordersRepository.deleteAll(orders);
       personRepository.deleteById(id);
       return ResponseHandler.generateResponse(ConsUser.USER_REMOVED_SUCCESS, HttpStatus.OK, null);
     } else {
@@ -288,9 +354,11 @@ public class PersonController {
     }
   }
 
+
   @DeleteMapping("/delete-all")
   public ResponseEntity<Object> deleteAllUsers() {
     try {
+      ordersRepository.deleteAll();
       personRepository.deleteAll();
       return ResponseHandler.generateResponse(ConsUser.USERS_REMOVED_SUCCESS, HttpStatus.OK, null);
     } catch (Exception e) {

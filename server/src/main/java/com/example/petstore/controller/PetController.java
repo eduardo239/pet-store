@@ -1,12 +1,15 @@
 package com.example.petstore.controller;
 
 
+import com.example.petstore.DTO.comments.CommentsBasicDTO;
 import com.example.petstore.DTO.pets.PetBasicDTO;
 import com.example.petstore.helper.Cons;
 import com.example.petstore.helper.ConsPets;
 import com.example.petstore.helper.ConsUser;
+import com.example.petstore.model.Comment;
 import com.example.petstore.model.Person;
 import com.example.petstore.model.Pet;
+import com.example.petstore.repository.CommentRepository;
 import com.example.petstore.repository.PersonRepository;
 import com.example.petstore.repository.PetRepository;
 import com.example.petstore.response.ResponseHandler;
@@ -34,6 +37,8 @@ public class PetController {
   private PetRepository petRepository;
   @Autowired
   private PersonRepository personRepository;
+  @Autowired
+  private CommentRepository commentRepository;
 
   @GetMapping
   public ResponseEntity<Object> getAllPets(
@@ -79,6 +84,31 @@ public class PetController {
     } catch (Exception e) {
       return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
 
+    }
+  }
+
+  // TODO: adicionar paginação
+  @PostMapping("{id}/comments")
+  public ResponseEntity<Object> addCommentAndAddToPetsComments(
+      @PathVariable Long id, @RequestBody Comment comment) {
+    try {
+      Optional<Pet> petToUpdate = petRepository.findById(id);
+      Optional<Person> person_ = personRepository.findById(comment.getPerson().getId());
+      if (petToUpdate.isEmpty()) {
+        return ResponseHandler.generateResponse(ConsPets.PET_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+      } else if (person_.isEmpty()) {
+        return ResponseHandler.generateResponse(ConsUser.USER_NOT_FOUND, HttpStatus.BAD_REQUEST, null);
+      } else {
+
+        comment.setPerson(person_.get());
+        Comment savedComment = commentRepository.save(comment);
+        CommentsBasicDTO commentResponse = modelMapper.map(savedComment, CommentsBasicDTO.class);
+
+        return ResponseHandler.generateResponse(
+            ConsPets.PET_REGISTERED_SUCCESS, HttpStatus.OK, commentResponse);
+      }
+    } catch (Exception e) {
+      return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
     }
   }
 
