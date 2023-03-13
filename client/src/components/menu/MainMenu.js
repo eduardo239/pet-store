@@ -26,11 +26,13 @@ const MainMenu = () => {
       >
         <Menu>
           <MenuButton
+            h="40px"
+            fontWeight="bold"
             variant="ghost"
             py={SPACING_XXSMALL}
             px={SPACING_MEDIUM}
-            bg={COLOR_BUTTON}
-            color={COLOR_WHITE}
+            // bg={COLOR_BUTTON}
+            // color={COLOR_WHITE}
             aria-label="Menu"
             onClick={() => navigate("/")}
             minW={FORM_BUTTON_MIN_WIDTH}

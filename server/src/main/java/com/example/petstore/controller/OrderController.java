@@ -2,7 +2,6 @@ package com.example.petstore.controller;
 
 
 import com.example.petstore.DTO.orders.OrdersBasicDTO;
-import com.example.petstore.DTO.pets.PetBasicDTO;
 import com.example.petstore.helper.*;
 import com.example.petstore.model.Address;
 import com.example.petstore.model.Orders;
@@ -24,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

@@ -61,7 +61,11 @@ const PetCard = ({ pet }) => {
       </Container>
 
       <CardFooter>
-        <PSButton variant="solid" onClick={() => navigate(`/pet/${pet.id}`)}>
+        <PSButton
+          w="full"
+          variant="solid"
+          onClick={() => navigate(`/pet/${pet.id}`)}
+        >
           Ver Mais
         </PSButton>
       </CardFooter>

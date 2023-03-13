@@ -18,6 +18,8 @@ import PSText from "../elements/PSText";
 import EditUserForm from "./EditUserForm";
 // contexto
 import { UserContext } from "../../../helper/context/User";
+import PSTextIcon from "../elements/PSTextIcon";
+import { IoDocumentAttachOutline } from "react-icons/io5";
 
 const EditUserModal = ({ isOpen, onClose }) => {
   const { user, setUser } = useContext(UserContext);
@@ -31,13 +33,14 @@ const EditUserModal = ({ isOpen, onClose }) => {
         border="1px solid"
         borderColor={FORM_BORDER_COLOR}
       >
-        <ModalHeader>
-          <PSText text>Formulário</PSText>
-        </ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack gap={SPACING_MEDIUM} bg="white" p={SPACING_MEDIUM}>
-            <PSText text>Editar suas informações pessoais</PSText>
+            <PSTextIcon
+              icon={<IoDocumentAttachOutline />}
+              value="Editar o endereço"
+            />
             {/*  */}
             <EditUserForm data={user} setData={setUser} onClose={onClose} />
           </Stack>

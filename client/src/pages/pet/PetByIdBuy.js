@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 // chakra
-import { GridItem, Stack } from "@chakra-ui/react";
+import { Box, Flex, GridItem, Stack } from "@chakra-ui/react";
 // componentes
 import PSGrid5050 from "../../components/layout/PSGrid5050";
 import PSSelect from "../../components/form/elements/PSSelect";
@@ -26,6 +26,7 @@ import {
 // contexto
 import { PetContext } from "../../helper/context/Pets";
 import { UserContext } from "../../helper/context/User";
+import PSStats from "../../components/layout/PSStats";
 
 const PetByIdBuy = () => {
   // eslint-disable-next-line no-unused-vars
@@ -37,18 +38,29 @@ const PetByIdBuy = () => {
   // eslint-disable-next-line no-unused-vars
   const [order, setOrder] = useState({});
   // eslint-disable-next-line no-unused-vars
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState({});
 
   return (
     <PSGrid5050 gap={1}>
-      <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
+      <GridItem p={SPACING_MEDIUM} bg={COLOR_WHITE}>
         <PSTextIcon
           icon={<IoDocumentAttachOutline />}
           value="Método de Pagamento"
         />
-        <PSSelect items={PAYMENT_TYPES} setValue={setPaymentMethod}></PSSelect>
+        <Box p={SPACING_SMALL}>
+          <PSSelect items={PAYMENT_TYPES} setValue={setPaymentMethod} />
+        </Box>
+
+        <PSTextIcon
+          icon={<IoDocumentAttachOutline />}
+          value="Método de Escolhido"
+        />
+
+        {/* <Flex flexWrap="wrap" p={SPACING_SMALL}>
+          <PSStats title="Método Escolhido" value={paymentMethod} />
+        </Flex> */}
       </GridItem>
-      <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE_ALTERNATE}>
+      <GridItem p={SPACING_MEDIUM} bg={COLOR_WHITE_ALTERNATE}>
         <Stack gap={SPACING_SMALL}>
           {/* <PetByIdTitle pet={pet} /> */}
           {/*  */}

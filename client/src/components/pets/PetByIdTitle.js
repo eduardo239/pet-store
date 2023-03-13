@@ -17,10 +17,10 @@ const PetByIdTitle = ({ pet, onOpenDelete, onOpenUpdate }) => {
           </Link>
         </PSText>
       ) : (
-        <PSText small>Pet não encontrado</PSText>
+        <PSText subtitle>Pet não encontrado</PSText>
       )}
       <Flex justifyContent="space-between" alignItems="center" w="100%">
-        <PSText text>{pet?.name}</PSText>
+        <PSText subtitle>{pet?.name}</PSText>
         {pet?.id && (
           <Flex>
             <IconButton

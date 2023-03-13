@@ -31,6 +31,7 @@ import {
 // contexto
 import { PetContext } from "../../helper/context/Pets";
 import { UserContext } from "../../helper/context/User";
+import PSText from "../../components/form/elements/PSText";
 
 const PetById = () => {
   const { pet } = useContext(PetContext);
@@ -52,7 +53,11 @@ const PetById = () => {
             value={`${pet.comments ? pet.comments.length : 0} comentários`}
           />
           {/*  */}
-          <PSTextIcon icon={<IoInfoOut />} value="Informações Extras" />
+          <PSTextIcon icon={<IoInfoOut />} value="Descrição" />
+          <PSText small p={SPACING_SMALL}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+            similique veniam eius inventore voluptatibus quia.
+          </PSText>
           {/*  */}
           <PSTextIcon icon={<IoStatsOut />} value="Informações Extras" />
           <PSPetStats pet={pet} />

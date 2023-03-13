@@ -1,5 +1,8 @@
 import { Button } from "@chakra-ui/react";
-import { FORM_BUTTON_MIN_WIDTH } from "../../../helper/constants/dimensions";
+import {
+  FORM_BORDER_RADIUS,
+  FORM_BUTTON_MIN_WIDTH,
+} from "../../../helper/constants/dimensions";
 
 /**
  *
@@ -10,7 +13,7 @@ const PSButton = ({
   w = "auto",
   children,
   variant = "solid",
-  size = "sm",
+  size = "md",
   type = "button",
   onClick,
   disabled = false,
@@ -18,6 +21,7 @@ const PSButton = ({
   return (
     <Button
       w={w}
+      pt={1}
       colorScheme="messenger"
       minW={FORM_BUTTON_MIN_WIDTH}
       type={type}
@@ -25,7 +29,7 @@ const PSButton = ({
       size={size}
       onClick={onClick}
       disabled={disabled}
-      borderRadius={0}
+      borderRadius={FORM_BORDER_RADIUS}
     >
       {children}
     </Button>

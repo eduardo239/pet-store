@@ -1,0 +1,41 @@
+:root {
+  --color-primary: #f9cd35;
+  --color-primary-alternate: #ffedad;
+  --color-primary-helper: #fff3c7;
+
+  --color-secondary: #565eb3;
+  --color-secondary-alternate: #adb5ff;
+
+  --color-primary-button: #0078ff;
+
+  --color-white: #fefefe;
+  --color-white-alternate: #fafafa;
+  --color-black: #1b1b1b;
+  --color-black-alternate: #2f2f2f;
+
+  --color-form-border: #dbdbdb;
+
+  --color-blue: #6ebccc;
+  --color-pink: #ed889e;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+::-moz-selection {
+  background: var(--color-black-alternate);
+  color: var(--color-white);
+}
+
+::selection {
+  background: var(--color-black-alternate);
+  color: var(--color-white);
+}
+
+svg {
+  width: 24px;
+  height: 24px;
+}
