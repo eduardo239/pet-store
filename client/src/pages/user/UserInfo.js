@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-// compoenentes
+import { useContext, useEffect, useState } from "react";
+// chakra
 import {
   GridItem,
   Tab,
@@ -9,15 +9,19 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import PSTextIcon from "../../components/form/elements/PSTextIcon";
+import { useQuery } from "../../helper/hooks/useQuery";
+// compoenentes
 import PSGridAutoFr from "../../components/layout/PSGridAutoFr";
-import EditUserInfo from "../../components/form/user/EditUserInfo";
+import PSTextIcon from "../../components/form/elements/PSTextIcon";
+import EditUserWrapper from "../../components/form/user/EditUserWrapper";
+import EditAddressWrapper from "../../components/form/address/EditAddressWrapper";
 // constantes
 import { COLOR_WHITE } from "../../helper/constants/colors";
 import {
   SPACING_MEDIUM,
   SPACING_SMALL,
 } from "../../helper/constants/dimensions";
+import { LABEL_ADDRESS, LABEL_USER } from "../../helper/constants";
 // icons
 import {
   IoAtCircleOutline,
@@ -25,40 +29,20 @@ import {
   IoInformationCircleOutline as IoInfoOut,
   IoPersonCircleOutline,
 } from "react-icons/io5";
-import { LABEL_ADDRESS, LABEL_USER } from "../../helper/constants";
 // contexto
-import { useQuery } from "../../helper/hooks/useQuery";
-import EditAddress from "../../components/form/address/EditAddress";
-import UserAvatar from "../../components/user/UserAvatar";
+import { UserContext } from "../../helper/context/User";
+import UserInformation from "../../components/user/UserInformation";
 // assets
 
 const UserInfo = () => {
-  const testUser = {
-    id: 1,
-    username: "user",
-    email: "email@email.com",
-    photo: null,
-    createdAt: "2023-03-12T12:05:35.599333",
-    updatedAt: null,
-  };
   // TODO: remover pets e endereço do usuário
-  const testAddress = {
-    cep: "01000100",
-    street: "Rua Atualizada",
-    number: "100",
-    complement: "APTO 1",
-    city: "Campinas",
-    state: "Sao Paulo",
-  };
 
   const navigate = useNavigate();
   const query = useQuery();
 
-  // const {} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const [tab, setTab] = useState(0);
-  const [user, setUser] = useState(testUser);
-  const [address, setAddress] = useState(testAddress);
 
   const handleTabChange = (index) => {
     setTab(index);
@@ -101,11 +85,7 @@ const UserInfo = () => {
     return (
       <PSGridAutoFr gap={SPACING_SMALL}>
         <GridItem w="100%" bg={COLOR_WHITE} p={SPACING_SMALL}>
-          <PSTextIcon icon={<IoInfoOut />} value="Informações Extras" />
-          {/*  */}
-          <UserAvatar avatar={null} />
-          {/*  */}
-          <PSTextIcon icon={<IoAtCircleOutline />} value="Username" />
+          <UserInformation />
         </GridItem>
         <GridItem w="100%" bg={COLOR_WHITE} p={SPACING_SMALL}>
           <Tabs
@@ -127,11 +107,13 @@ const UserInfo = () => {
                   icon={<IoPersonCircleOutline />}
                   value="Informações"
                 />
-                <EditUserInfo data={user} setData={setUser} />
+                <EditUserWrapper data={user} />
               </TabPanel>
+
               <TabPanel>
                 <PSTextIcon icon={<IoBusOutline />} value="Endreço" />
-                <EditAddress data={address} setData={setAddress} />
+
+                <EditAddressWrapper data={user.address} />
               </TabPanel>
             </TabPanels>
           </Tabs>

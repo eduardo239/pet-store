@@ -1,10 +1,7 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // chakra
 import { Flex, GridItem, Stack } from "@chakra-ui/react";
-import { useState } from "react";
-// componentes
-import PSGrid5050 from "../../components/layout/PSGrid5050";
-import PSGallery from "../../components/images/PSGallery";
 // constantes
 import {
   SPACING_MEDIUM,
@@ -14,12 +11,16 @@ import {
   COLOR_WHITE,
   COLOR_WHITE_ALTERNATE,
 } from "../../helper/constants/colors";
+import { R_COLSPAN_1_2 } from "../../helper/constants/responsive";
 // componentes
-import PetByIdTitle from "../../components/pets/PetByIdTitle";
-import PSTextIcon from "../../components/form/elements/PSTextIcon";
+import PSGallery from "../../components/images/PSGallery";
 import PSPetStats from "../../components/pets/PSPetStats";
-import PetBuyOptions from "../../components/pets/PetBuyOptions";
+import PSGrid5050 from "../../components/layout/PSGrid5050";
+import PetByIdTitle from "../../components/pets/PetByIdTitle";
 import PSButton from "../../components/form/elements/PSButton";
+import CommentList from "../../components/comments/CommentList";
+import PetBuyOptions from "../../components/pets/PetBuyOptions";
+import PSTextIcon from "../../components/form/elements/PSTextIcon";
 // icons
 import {
   IoChatboxEllipsesOutline as IoChatOut,
@@ -27,78 +28,18 @@ import {
   IoStatsChartOutline as IoStatsOut,
   IoWalletOutline,
 } from "react-icons/io5";
+// contexto
+import { PetContext } from "../../helper/context/Pets";
+import { UserContext } from "../../helper/context/User";
 
 const PetById = () => {
-  const testUser = {
-    id: 1,
-    username: "user",
-    email: "email@email.com",
-    photo: null,
-    address: null,
-    createdAt: "2023-03-12T12:05:35.599333",
-    updatedAt: null,
-    pets: [
-      {
-        id: 1,
-        name: "pet name",
-        price: 0.0,
-        birthDay: "2023-03-11",
-        gender: "female",
-        photo: null,
-        comments: [
-          {
-            id: 1,
-            content: "Null comentário",
-            likes: 34,
-          },
-        ],
-        createdAt: "2023-03-12T12:05:42.001851",
-        updatedAt: null,
-        forSale: false,
-      },
-    ],
-  };
-
-  const testPet = {
-    id: 1,
-    name: "pet name",
-    price: 0.0,
-    birthDay: "2023-03-11",
-    gender: "female",
-    photo: null,
-    owner: {
-      id: 1,
-      username: "user",
-      email: "email@email.com",
-      photo: null,
-      address: null,
-      createdAt: "2023-03-12T12:05:35.599333",
-      updatedAt: null,
-    },
-    comments: [
-      {
-        id: 1,
-        content: "Null comentário",
-        likes: 34,
-      },
-      {
-        id: 2,
-        content: "Null 2 comentário",
-        likes: 124,
-      },
-    ],
-    createdAt: "2023-03-12T12:05:42.001851",
-    updatedAt: null,
-    forSale: true,
-  };
+  const { pet } = useContext(PetContext);
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(testUser);
-  const [pet, setPet] = useState(testPet);
-
   return (
-    <PSGrid5050>
+    <PSGrid5050 gap={1}>
       <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
         <PSGallery item={pet} />
       </GridItem>
@@ -119,7 +60,7 @@ const PetById = () => {
           {user && pet.forSale ? (
             <>
               <PSTextIcon icon={<IoWalletOutline />} value="Preço" />
-              <PetBuyOptions pet={pet} petList={testUser.pets} />
+              <PetBuyOptions pet={pet} petList={user.pets} />
             </>
           ) : (
             !user && (
@@ -130,8 +71,8 @@ const PetById = () => {
           )}
         </Stack>
       </GridItem>
-      <GridItem bg="#aad" w="100%">
-        3
+      <GridItem colSpan={R_COLSPAN_1_2} bg={COLOR_WHITE}>
+        <CommentList />
       </GridItem>
     </PSGrid5050>
   );

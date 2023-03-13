@@ -1,20 +1,7 @@
 // chakra
-import {
-  Box,
-  Divider,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Image,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 // constantes
-import {
-  R_GRID_50_50_TO_1FR,
-  R_GRID_CENTER_TO_START,
-} from "../../helper/constants/responsive";
+import { R_GRID_50_50_TO_1FR } from "../../helper/constants/responsive";
 
 const PSGrid5050 = ({ children, gap = 0 }) => {
   return (

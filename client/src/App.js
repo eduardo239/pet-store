@@ -15,13 +15,13 @@ import MainMenu from "./components/menu/MainMenu";
 // constantes
 import {
   COLOR_BLACK_ALTERNATE,
-  COLOR_PRIMARY_LIGHTER,
+  COLOR_WHITE_ALTERNATE,
 } from "./helper/constants/colors";
 
 function App() {
   return (
     <Flex bg={COLOR_BLACK_ALTERNATE}>
-      <Container bg={COLOR_PRIMARY_LIGHTER} maxW="1060px" minH="100vh">
+      <Container bg={COLOR_WHITE_ALTERNATE} maxW="1060px" minH="100vh">
         <MainMenu />
         <Routes>
           <Route exact path="/" element={<Pets />} />
@@ -32,6 +32,7 @@ function App() {
           {/*  */}
           <Route exact path="/sign-in" element={<SignIn />} />
           <Route exact path="/sign-up" element={<SignUp />} />
+          {/*  */}
           <Route exact path="/user" element={<UserInfo />} />
           <Route exact path="/user-pets" element={<UserPets />} />
         </Routes>

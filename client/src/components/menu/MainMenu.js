@@ -1,47 +1,48 @@
-import { Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import {
-  LABEL_ADDRESS,
-  LABEL_ADD_PETS,
-  LABEL_PETS,
-  LABEL_USER,
-  LABEL_USER_PETS,
-} from "../../helper/constants";
+// chakra
+import { Flex, Menu, MenuButton } from "@chakra-ui/react";
+// constantes
 import {
   SPACING_MEDIUM,
-  SPACING_XSMALL,
+  SPACING_SMALL,
+  SPACING_XXSMALL,
+  FORM_BUTTON_MIN_WIDTH,
+  FORM_BORDER_RADIUS,
 } from "../../helper/constants/dimensions";
-import PSButton from "../form/elements/PSButton";
+import { COLOR_BUTTON, COLOR_WHITE } from "../../helper/constants/colors";
+// componentes
+import UserMenu from "./UserMenu";
 
 const MainMenu = () => {
   const navigate = useNavigate();
   return (
-    <Flex
-      flexWrap="wrap"
-      rowGap={SPACING_XSMALL}
-      justifyContent="space-between"
-    >
-      <PSButton onClick={() => navigate("/home")}>Início</PSButton>
-      <PSButton onClick={() => navigate("/")}>Pets</PSButton>
-      <PSButton onClick={() => navigate("/sign-up")}>Registrar</PSButton>
-      <PSButton onClick={() => navigate("/sign-in")}>Entrar</PSButton>
-      <PSButton onClick={() => navigate(`/${LABEL_USER}?tab=${LABEL_USER}`)}>
-        Perfil
-      </PSButton>
-      <PSButton onClick={() => navigate(`/${LABEL_USER}?tab=${LABEL_ADDRESS}`)}>
-        Endereço
-      </PSButton>
-      <PSButton
-        onClick={() => navigate(`/${LABEL_USER_PETS}?tab=${LABEL_PETS}`)}
+    <>
+      <Flex
+        gap={1}
+        flexWrap="wrap"
+        justifyContent="space-between"
+        alignItems="center"
+        my={SPACING_SMALL}
       >
-        Meus Pets
-      </PSButton>
-      <PSButton
-        onClick={() => navigate(`/${LABEL_USER_PETS}?tab=${LABEL_ADD_PETS}`)}
-      >
-        Adicionar Pet
-      </PSButton>
-    </Flex>
+        <Menu>
+          <MenuButton
+            variant="ghost"
+            py={SPACING_XXSMALL}
+            px={SPACING_MEDIUM}
+            bg={COLOR_BUTTON}
+            color={COLOR_WHITE}
+            aria-label="Menu"
+            onClick={() => navigate("/")}
+            minW={FORM_BUTTON_MIN_WIDTH}
+            borderRadius={FORM_BORDER_RADIUS}
+          >
+            Início
+          </MenuButton>
+        </Menu>
+
+        <UserMenu />
+      </Flex>
+    </>
   );
 };
 

@@ -48,3 +48,30 @@ export const checkIfObjectIsInTheList = (obj, list) => {
   }
   return false;
 };
+
+/**
+ *
+ * @param {Object} obj Recebe um objeto qualquer
+ * @returns retorno uma array, transforma valor null em 'Valor Nulo',
+ *  transforma valor array em quantidade de items
+ */
+export const convertObjectToArray = (obj) => {
+  if (!obj) return;
+
+  const objToArray = [];
+  let arr = Object.entries(obj);
+  arr.forEach((item, idx) => {
+    let value =
+      item[1] === null
+        ? "Valor Nulo"
+        : item[1] && Array.isArray(item[1])
+        ? item[1].length
+        : item[1] instanceof Object
+        ? "Objeto"
+        : item[1];
+    objToArray.push([item[0], value]);
+
+    value = null;
+  });
+  return objToArray;
+};

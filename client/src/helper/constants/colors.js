@@ -4,6 +4,8 @@ export const COLOR_PRIMARY_LIGHTER = "#FFF3C7";
 export const COLOR_SECONDARY = "#565EB3";
 export const COLOR_SECONDARY_ALT = "#ADB5FF";
 
+export const COLOR_BUTTON = "rgb(0, 120, 255)";
+
 export const COLOR_WHITE = "#fefefe";
 export const COLOR_WHITE_ALTERNATE = "#fafafa";
 

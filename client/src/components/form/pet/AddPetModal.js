@@ -1,3 +1,4 @@
+// chakra
 import {
   Modal,
   ModalBody,
@@ -14,8 +15,9 @@ import { SPACING_MEDIUM } from "../../../helper/constants/dimensions";
 // componentes
 import PSText from "../elements/PSText";
 import AddPetForm from "./AddPetForm";
+// contexto
 
-const AddPetModal = ({ isOpen, onClose, data, setData }) => {
+const AddPetModal = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -34,7 +36,7 @@ const AddPetModal = ({ isOpen, onClose, data, setData }) => {
             <PSText text>Adicionar um Pet</PSText>
 
             {/*  */}
-            <AddPetForm data={data} setData={setData} onClose={onClose} />
+            <AddPetForm onClose={onClose} />
           </Stack>
         </ModalBody>
 

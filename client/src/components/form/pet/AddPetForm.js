@@ -7,8 +7,11 @@ import {
   SPACING_XSMALL,
 } from "../../../helper/constants/dimensions";
 import PSButton from "../elements/PSButton";
+import { useState } from "react";
 
-const AddPetForm = ({ data, setData, onClose }) => {
+const AddPetForm = ({ onClose }) => {
+  const [data, setData] = useState({});
+
   const handleAdd = () => {
     console.log(data);
   };
@@ -19,7 +22,7 @@ const AddPetForm = ({ data, setData, onClose }) => {
         req
         name="name"
         type="text"
-        label="CEP"
+        label="Nome"
         onChange={(val) => setData({ ...data, name: val.target.value })}
       />
       <PSInput

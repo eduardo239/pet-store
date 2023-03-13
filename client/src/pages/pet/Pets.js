@@ -1,55 +1,16 @@
-import { useState } from "react";
+import { useContext } from "react";
+// chakra
 import { Flex } from "@chakra-ui/react";
+// componentes
 import PetCard from "../../components/cards/PetCard";
+// constantes
 import { SPACING_SMALL } from "../../helper/constants/dimensions";
+// contexto
+import { PetContext } from "../../helper/context/Pets";
 
 const Pets = () => {
-  const [pets, setPets] = useState([
-    {
-      id: 1,
-      name: "marjunco",
-      price: 0,
-      birthDay: "2023-03-11T09:45:35.195315081",
-      isForSale: false,
-      gender: "female",
-      owner: {
-        id: 1,
-      },
-    },
-    {
-      id: 2,
-      name: "popo",
-      price: 0,
-      birthDay: "2023-03-11T09:45:35.195315081",
-      isForSale: false,
-      gender: "female",
-      owner: {
-        id: 2,
-      },
-    },
-    {
-      id: 3,
-      name: "popo",
-      price: 0,
-      birthDay: "2023-03-11T09:45:35.195315081",
-      isForSale: false,
-      gender: "female",
-      owner: {
-        id: 2,
-      },
-    },
-    {
-      id: 55,
-      name: "popo",
-      price: 0,
-      birthDay: "2023-03-11T09:45:35.195315081",
-      isForSale: false,
-      gender: "female",
-      owner: {
-        id: 2,
-      },
-    },
-  ]);
+  const { pets } = useContext(PetContext);
+  // eslint-disable-next-line no-unused-vars
 
   const forEachItems = () => {
     return pets.map((pet, idx) => <PetCard key={pet.id} pet={pet} />);

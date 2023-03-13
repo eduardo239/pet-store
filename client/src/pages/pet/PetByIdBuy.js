@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 // chakra
 import { GridItem, Stack } from "@chakra-ui/react";
 // componentes
 import PSGrid5050 from "../../components/layout/PSGrid5050";
-import PSTextIcon from "../../components/form/elements/PSTextIcon";
-import EditAddress from "../../components/form/address/EditAddress";
 import PSSelect from "../../components/form/elements/PSSelect";
+import PSTextIcon from "../../components/form/elements/PSTextIcon";
+import EditAddressWrapper from "../../components/form/address/EditAddressWrapper";
 // constantes
 import { PAYMENT_TYPES } from "../../helper/constants";
 import {
@@ -23,63 +23,30 @@ import {
   IoDocumentAttachOutline,
   IoWalletOutline,
 } from "react-icons/io5";
+// contexto
+import { PetContext } from "../../helper/context/Pets";
+import { UserContext } from "../../helper/context/User";
 
 const PetByIdBuy = () => {
-  const testPet = {
-    id: 1,
-    name: "pet name",
-    price: 0.0,
-    birthDay: "2023-03-11",
-    gender: "female",
-    photo: null,
-    owner: {
-      id: 1,
-      username: "user",
-      email: "email@email.com",
-      photo: null,
-      address: null,
-      createdAt: "2023-03-12T12:05:35.599333",
-      updatedAt: null,
-    },
-    comments: [
-      {
-        id: 1,
-        content: "Null comentário",
-        likes: 34,
-      },
-    ],
-    createdAt: "2023-03-12T12:05:42.001851",
-    updatedAt: null,
-    forSale: false,
-  };
-
-  const addressTest = {
-    id: 1,
-    cep: "01000100",
-    street: "Rua Atualizada",
-    number: "100",
-    complement: "APTO 1",
-    city: "Campinas",
-    state: "Sao Paulo",
-    createdAt: "2023-03-12T13:34:01.478793356",
-    updatedAt: "2023-03-12T13:34:01.486284276",
-  };
-
+  // eslint-disable-next-line no-unused-vars
   const { id } = useParams();
 
-  const [pet, setPet] = useState(testPet);
+  const { pet } = useContext(PetContext);
+  const { user } = useContext(UserContext);
+
+  // eslint-disable-next-line no-unused-vars
   const [order, setOrder] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [address, setAddress] = useState(addressTest);
 
   return (
-    <PSGrid5050>
+    <PSGrid5050 gap={1}>
       <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
         <PSTextIcon
           icon={<IoDocumentAttachOutline />}
           value="Método de Pagamento"
         />
-        <PSSelect items={PAYMENT_TYPES}></PSSelect>
+        <PSSelect items={PAYMENT_TYPES} setValue={setPaymentMethod}></PSSelect>
       </GridItem>
       <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE_ALTERNATE}>
         <Stack gap={SPACING_SMALL}>
@@ -88,7 +55,7 @@ const PetByIdBuy = () => {
           {pet && (
             <>
               <PSTextIcon icon={<IoCityOut />} value="Endreço de entrega" />
-              <EditAddress data={address} setData={setAddress} />
+              <EditAddressWrapper data={user.address} />
               {/*  */}
               <PSTextIcon icon={<IoWalletOutline />} value="Resumo da Compra" />
             </>

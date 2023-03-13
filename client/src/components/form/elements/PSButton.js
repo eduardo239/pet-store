@@ -10,7 +10,7 @@ const PSButton = ({
   w = "auto",
   children,
   variant = "solid",
-  size,
+  size = "sm",
   type = "button",
   onClick,
   disabled = false,
@@ -18,7 +18,6 @@ const PSButton = ({
   return (
     <Button
       w={w}
-      paddingTop="3px"
       colorScheme="messenger"
       minW={FORM_BUTTON_MIN_WIDTH}
       type={type}

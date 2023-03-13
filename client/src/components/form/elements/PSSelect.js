@@ -1,8 +1,11 @@
 import { Select } from "@chakra-ui/react";
 
-const PSSelect = ({ items = [] }) => {
+const PSSelect = ({ items = [], setValue }) => {
   return (
-    <Select placeholder="Select option">
+    <Select
+      placeholder="Selecione uma opção"
+      onChange={(v) => setValue(v.target.value)}
+    >
       {items.map((item, index) => (
         <option key={index} value={item.value}>
           {item.label}

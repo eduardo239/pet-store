@@ -1,3 +1,5 @@
+import { useContext } from "react";
+// chakra
 import {
   Modal,
   ModalBody,
@@ -14,8 +16,12 @@ import { SPACING_MEDIUM } from "../../../helper/constants/dimensions";
 // componentes
 import PSText from "../elements/PSText";
 import EditUserForm from "./EditUserForm";
+// contexto
+import { UserContext } from "../../../helper/context/User";
 
-const EditUserModal = ({ isOpen, onClose, data, setData }) => {
+const EditUserModal = ({ isOpen, onClose }) => {
+  const { user, setUser } = useContext(UserContext);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -33,7 +39,7 @@ const EditUserModal = ({ isOpen, onClose, data, setData }) => {
           <Stack gap={SPACING_MEDIUM} bg="white" p={SPACING_MEDIUM}>
             <PSText text>Editar suas informações pessoais</PSText>
             {/*  */}
-            <EditUserForm data={data} setData={setData} onClose={onClose} />
+            <EditUserForm data={user} setData={setUser} onClose={onClose} />
           </Stack>
         </ModalBody>
 

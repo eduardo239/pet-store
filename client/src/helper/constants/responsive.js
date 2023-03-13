@@ -8,3 +8,5 @@ export const R_GRID_AUTO_1FR_TO_1FR = {
   md: "minmax(auto, 300px) 1fr",
 };
 export const R_GRID_CENTER_TO_START = { base: "center", md: "flex-start" };
+
+export const R_COLSPAN_1_2 = { base: 1, md: 2 };

@@ -1,9 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import {
-  COLOR_WHITE,
-  COLOR_WHITE_ALTERNATE,
-  FORM_BORDER_COLOR,
-} from "../../helper/constants/colors";
+import { COLOR_WHITE, FORM_BORDER_COLOR } from "../../helper/constants/colors";
 import {
   FORM_BORDER_RADIUS,
   SPACING_SMALL,
