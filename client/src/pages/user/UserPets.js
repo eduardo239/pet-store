@@ -31,6 +31,7 @@ import {
 } from "react-icons/io5";
 import { UserContext } from "../../helper/context/User";
 import UserInformation from "../../components/user/UserInformation";
+import { R_GRID_AUTO300_1FR_TO_1FR } from "../../helper/constants/responsive";
 // contexto
 
 const UserPets = () => {
@@ -80,7 +81,10 @@ const UserPets = () => {
 
   if (user)
     return (
-      <PSGridAutoFr gap={SPACING_SMALL}>
+      <PSGridAutoFr
+        gap={SPACING_SMALL}
+        templateColumns={R_GRID_AUTO300_1FR_TO_1FR}
+      >
         <GridItem w="100%" bg={COLOR_WHITE} p={SPACING_SMALL}>
           <UserInformation />
         </GridItem>
@@ -120,7 +124,7 @@ const UserPets = () => {
     );
   else
     return (
-      <PSGridAutoFr>
+      <PSGridAutoFr templateColumns={R_GRID_AUTO300_1FR_TO_1FR}>
         <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
           <PSTextIcon icon={<IoInfoOut />} value="Informações Extras" />
           <PSTextIcon

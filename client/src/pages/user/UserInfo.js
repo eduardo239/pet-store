@@ -32,6 +32,7 @@ import {
 // contexto
 import { UserContext } from "../../helper/context/User";
 import UserInformation from "../../components/user/UserInformation";
+import { R_GRID_AUTO300_1FR_TO_1FR } from "../../helper/constants/responsive";
 // assets
 
 const UserInfo = () => {
@@ -83,7 +84,10 @@ const UserInfo = () => {
 
   if (user)
     return (
-      <PSGridAutoFr gap={SPACING_SMALL}>
+      <PSGridAutoFr
+        gap={SPACING_SMALL}
+        templateColumns={R_GRID_AUTO300_1FR_TO_1FR}
+      >
         <GridItem w="100%" bg={COLOR_WHITE} p={SPACING_SMALL}>
           <UserInformation />
         </GridItem>
@@ -122,7 +126,7 @@ const UserInfo = () => {
     );
   else
     return (
-      <PSGridAutoFr>
+      <PSGridAutoFr templateColumns={R_GRID_AUTO300_1FR_TO_1FR}>
         <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
           <PSTextIcon icon={<IoInfoOut />} value="Informações Extras" />
           <PSTextIcon

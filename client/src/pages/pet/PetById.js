@@ -40,7 +40,7 @@ const PetById = () => {
   const navigate = useNavigate();
 
   return (
-    <PSGrid5050 gap={1}>
+    <PSGrid5050>
       <GridItem w="100%" p={SPACING_MEDIUM} bg={COLOR_WHITE}>
         <PSGallery item={pet} />
       </GridItem>
@@ -77,7 +77,7 @@ const PetById = () => {
         </Stack>
       </GridItem>
       <GridItem colSpan={R_COLSPAN_1_2} bg={COLOR_WHITE}>
-        <CommentList />
+        <CommentList user={user} />
       </GridItem>
     </PSGrid5050>
   );

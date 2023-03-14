@@ -41,7 +41,7 @@ const PetByIdBuy = () => {
   const [paymentMethod, setPaymentMethod] = useState({});
 
   return (
-    <PSGrid5050 gap={1}>
+    <PSGrid5050>
       <GridItem p={SPACING_MEDIUM} bg={COLOR_WHITE}>
         <PSTextIcon
           icon={<IoDocumentAttachOutline />}
